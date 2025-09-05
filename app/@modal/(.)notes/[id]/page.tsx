@@ -6,6 +6,7 @@ import NotePreviewClient from "./NotePreview.client";
 interface NotePreviewMainProps {
   params: Promise<{id: string}>
 }
+
 const NotePreviewMain = async ({params}: NotePreviewMainProps) => {
   const { id } = await params;
     const queryClient = new QueryClient();

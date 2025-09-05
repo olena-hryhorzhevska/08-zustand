@@ -7,6 +7,30 @@ type Props = {
   params: Promise<{ id: string }>;
 };
 
+
+export async function generateMetadata({ params }: Props) {
+  const { id } = await params;
+  const note = await fetchNoteById(id);
+  return {
+    title: note.title,
+    description: note.content.slice(0, 160),
+    openGraph: {
+      title: note.title,
+      description: note.content.slice(0, 160),
+      url: `https://08-zustand-liard.vercel.app/notes/${id}`,
+      images: [
+        {
+          url: "https://ac.goit.global/fullstack/react/notehub-og-meta.jpg",
+          width: 1200,
+          height: 630,
+          alt: note.title,
+        }
+      ],
+      type: "website",
+    }
+  };
+}
+
 const NoteDetails = async ({ params }: Props) => {
   const { id } = await params;
 

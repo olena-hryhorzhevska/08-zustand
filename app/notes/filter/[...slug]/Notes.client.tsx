@@ -8,10 +8,9 @@ import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { fetchNotes } from "@/lib/api";
 import Pagination from "@/components/Pagination/Pagination";
 import SearchBox from "@/components/SearchBox/SearchBox";
-import Modal from "@/components/Modal/Modal";
-import NoteForm from "@/components/NoteForm/NoteForm";
 import { Toaster } from "react-hot-toast";
 import { useDebounce } from "use-debounce";
+import Link from "next/link";
 
 interface NotesPageClientProps {
   category: string | undefined;
@@ -20,7 +19,6 @@ interface NotesPageClientProps {
 export default function NotesPageClient({category}: NotesPageClientProps) {
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [debouncedSearch] = useDebounce(search, 300);
   const perPage = 12;
 
@@ -33,21 +31,6 @@ export default function NotesPageClient({category}: NotesPageClientProps) {
   });
 
   const totalPages = data?.totalPages || 0;
-
-  const openModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const closeModal = () => {
-    setIsModalOpen(false);
-  };
-
-  const handleClose = (reason: "created" | "canceled") => {
-    closeModal();
-    if (reason === "created") {
-      setPage(1);
-    }
-  };
 
   useEffect(() => {
     setPage(1);
@@ -64,20 +47,11 @@ export default function NotesPageClient({category}: NotesPageClientProps) {
             onPageChange={setPage}
           />
         )}
-        <button className={css.button} onClick={openModal}>
+        <Link className={css.button} href={`/notes/action/create/`}>
           Create note +
-        </button>
+        </Link>
       </header>
       <Toaster position="top-center" reverseOrder={true} />
-      {isModalOpen && (
-        <Modal
-          onClose={() => {
-            handleClose("canceled");
-          }}
-        >
-          <NoteForm onClose={handleClose} />
-        </Modal>
-      )}
       {isLoading && <p>Loading...</p>}
       {isError && <p>Error loading notes</p>}
       {isSuccess && data.notes.length > 0 && <NoteList notes={data?.notes} />}
