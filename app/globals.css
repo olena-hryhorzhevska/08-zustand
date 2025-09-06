@@ -7,6 +7,11 @@ body {
   background-color: #f8f9fa;
 }
 
+main {
+  flex: 1; 
+}
+
+
 button {
   font: inherit;
 }
