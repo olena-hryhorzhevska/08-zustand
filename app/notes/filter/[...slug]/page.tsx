@@ -4,15 +4,16 @@ import {
   dehydrate,
 } from "@tanstack/react-query";
 import { fetchNotes } from "@/lib/api";
+import { Metadata } from "next";
 import NotesPageClient from "@/app/notes/filter/[...slug]/Notes.client";
 
 interface NotesPageProps {
   params: Promise<{ slug: string[] }>;
 }
 
-export async function generateMetadata({ params }: NotesPageProps) {
+export async function generateMetadata({ params }: NotesPageProps): Promise<Metadata> {
   const { slug } = await params;
-  const category = slug[0] === 'All' ? 'All Notes' : slug[0];
+  const category = slug[0] === "All" ? "All Notes" : slug[0];
   return {
     title: category,
     description: `Browse notes in the ${category} category.`,
